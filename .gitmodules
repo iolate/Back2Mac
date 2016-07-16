@@ -1,0 +1,9 @@
+[submodule "MBProgressHUD"]
+	path = MBProgressHUD
+	url = https://github.com/jdg/MBProgressHUD
+[submodule "JSONProxy"]
+	path = JSONProxy
+	url = https://github.com/iolate/JSONProxy
+[submodule "SDWebImage"]
+	path = SDWebImage
+	url = https://github.com/rs/SDWebImage
