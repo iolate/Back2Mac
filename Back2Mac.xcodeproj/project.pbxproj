@@ -33,6 +33,8 @@
 		DC1A54191D3A7932009A5E30 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1A54181D3A7932009A5E30 /* NotificationController.m */; };
 		DC1A541B1D3A7A42009A5E30 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC1A541A1D3A7A42009A5E30 /* AudioToolbox.framework */; };
 		DC1A541D1D3AAA62009A5E30 /* Tri-tone.caf in Resources */ = {isa = PBXBuildFile; fileRef = DC1A541C1D3A7A65009A5E30 /* Tri-tone.caf */; };
+		DC1A54251D3BFA13009A5E30 /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1A54221D3BFA13009A5E30 /* MGSwipeButton.m */; };
+		DC1A54261D3BFA13009A5E30 /* MGSwipeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1A54241D3BFA13009A5E30 /* MGSwipeTableCell.m */; };
 		DCB4804C1D37EAAC00A2B4FC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DCB4804B1D37EAAC00A2B4FC /* main.m */; };
 		DCB4804F1D37EAAC00A2B4FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DCB4804E1D37EAAC00A2B4FC /* AppDelegate.m */; };
 		DCB480581D37EAAC00A2B4FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DCB480561D37EAAC00A2B4FC /* Main.storyboard */; };
@@ -96,6 +98,10 @@
 		DC1A54181D3A7932009A5E30 /* NotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
 		DC1A541A1D3A7A42009A5E30 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DC1A541C1D3A7A65009A5E30 /* Tri-tone.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Tri-tone.caf"; sourceTree = "<group>"; };
+		DC1A54211D3BFA13009A5E30 /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSwipeButton.h; path = MGSwipeTableCell/MGSwipeTableCell/MGSwipeButton.h; sourceTree = SOURCE_ROOT; };
+		DC1A54221D3BFA13009A5E30 /* MGSwipeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGSwipeButton.m; path = MGSwipeTableCell/MGSwipeTableCell/MGSwipeButton.m; sourceTree = SOURCE_ROOT; };
+		DC1A54231D3BFA13009A5E30 /* MGSwipeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSwipeTableCell.h; path = MGSwipeTableCell/MGSwipeTableCell/MGSwipeTableCell.h; sourceTree = SOURCE_ROOT; };
+		DC1A54241D3BFA13009A5E30 /* MGSwipeTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGSwipeTableCell.m; path = MGSwipeTableCell/MGSwipeTableCell/MGSwipeTableCell.m; sourceTree = SOURCE_ROOT; };
 		DCB480471D37EAAC00A2B4FC /* Back2Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Back2Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCB4804B1D37EAAC00A2B4FC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DCB4804D1D37EAAC00A2B4FC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -199,6 +205,17 @@
 			name = Article;
 			sourceTree = "<group>";
 		};
+		DC1A54271D3BFA16009A5E30 /* MGSwipeTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				DC1A54211D3BFA13009A5E30 /* MGSwipeButton.h */,
+				DC1A54221D3BFA13009A5E30 /* MGSwipeButton.m */,
+				DC1A54231D3BFA13009A5E30 /* MGSwipeTableCell.h */,
+				DC1A54241D3BFA13009A5E30 /* MGSwipeTableCell.m */,
+			);
+			name = MGSwipeTableCell;
+			sourceTree = "<group>";
+		};
 		DCB4803E1D37EAAC00A2B4FC = {
 			isa = PBXGroup;
 			children = (
@@ -260,6 +277,7 @@
 				DCB480721D38013900A2B4FC /* MBProgressHUD.m */,
 				DCB480771D38070800A2B4FC /* JSONProxy.h */,
 				DCB480781D38070800A2B4FC /* JSONProxy.m */,
+				DC1A54271D3BFA16009A5E30 /* MGSwipeTableCell */,
 				DC1A53CE1D393EA0009A5E30 /* SDWebImage */,
 			);
 			name = Others;
@@ -356,6 +374,7 @@
 				DC1A54161D3A5767009A5E30 /* B2MActivity.m in Sources */,
 				DCB480691D37F19F00A2B4FC /* BookmarkTableViewController.m in Sources */,
 				DC1A54011D393F0C009A5E30 /* NSData+ImageContentType.m in Sources */,
+				DC1A54261D3BFA13009A5E30 /* MGSwipeTableCell.m in Sources */,
 				DCB4804C1D37EAAC00A2B4FC /* main.m in Sources */,
 				DC1A53831D3909B1009A5E30 /* DetailOptionTableViewController.m in Sources */,
 				DC1A54071D393F0C009A5E30 /* SDWebImageManager.m in Sources */,
@@ -364,6 +383,7 @@
 				DC1A54061D393F0C009A5E30 /* SDWebImageDownloaderOperation.m in Sources */,
 				DCB480731D38013900A2B4FC /* MBProgressHUD.m in Sources */,
 				DC1A54001D393F0C009A5E30 /* MKAnnotationView+WebCache.m in Sources */,
+				DC1A54251D3BFA13009A5E30 /* MGSwipeButton.m in Sources */,
 				DC1A54031D393F0C009A5E30 /* SDWebImageCompat.m in Sources */,
 				DC1A54091D393F0C009A5E30 /* UIButton+WebCache.m in Sources */,
 				DC1A540D1D393F0C009A5E30 /* UIImageView+HighlightedWebCache.m in Sources */,

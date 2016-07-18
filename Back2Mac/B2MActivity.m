@@ -6,6 +6,7 @@
 //
 
 #import "B2MActivity.h"
+#import "Back2Mac.h"
 
 @interface B2MActivity ()
 @property (nonatomic, strong) NSString* type;
@@ -46,11 +47,13 @@
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
-    for (id obj in activityItems) {
-        if ([obj isKindOfClass:[NSURL class]] == FALSE) return FALSE;
+    if ([self.type isEqualToString:@"addToBookmark"]) {
+        return (activityItems.count > 0 && [self extractArticleId:activityItems[0]] != nil);
+    }else if ([self.type isEqualToString:@"openInSafari"]) {
+        return (activityItems.count > 0 && [activityItems[0] isKindOfClass:[NSURL class]]);
+    }else{
+        return FALSE;
     }
-    
-    return TRUE;
 }
 
 +(UIActivityCategory)activityCategory {
@@ -63,14 +66,50 @@
     }
 }
 
+- (nullable UIViewController *)activityViewController {
+    if ([self.type isEqualToString:@"addToBookmark"]) {
+        NSString* articleId = [self extractArticleId:self.activityURL];
+        if (articleId != nil) {
+            [Back2Mac articleId:articleId toBookmark:YES userInfo:nil];
+            
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Back2Mac"
+                                                                                     message:@"책갈피 표시 완료"
+                                                                              preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"확인" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                [self activityDidFinish:YES];
+            }];
+            [alertController addAction:cancelAction];
+            
+            return alertController;
+        }else return nil;
+    }else return nil;
+}
+
 - (void)performActivity {
     if ([self.type isEqualToString:@"addToBookmark"]) {
+        NSLog(@"perform bookmark");
         
     }else if ([self.type isEqualToString:@"openInSafari"]) {
         [[UIApplication sharedApplication] openURL:self.activityURL];
     }
     
     [self activityDidFinish:YES];
+}
+
+#pragma mark -
+
+-(NSString *)extractArticleId:(NSURL *)url {
+    NSString* urlString = url.absoluteString;
+    NSRegularExpression *regex = [NSRegularExpression
+                                  regularExpressionWithPattern:@"(?:macnews.tistory.com\\/m\\/post\\/|macnews.tistory.com\\/)(\\d*)"
+                                  options:NSRegularExpressionCaseInsensitive
+                                  error:nil];
+    NSTextCheckingResult* match = [regex firstMatchInString:urlString options:0 range:NSMakeRange(0, [urlString length])];
+    if (match != nil) {
+        NSString* articleId = [urlString substringWithRange:[match rangeAtIndex:1]];
+        if (articleId.length == 0) return nil;
+        else return articleId;
+    }else return nil;
 }
 
 @end

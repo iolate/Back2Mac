@@ -6,13 +6,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MGSwipeTableCell.h"
 
-@interface ArticleListTableViewCell : UITableViewCell
+typedef NS_ENUM(NSInteger, ArticleCellMarkType) {
+    ArticleCellMarkNone,
+    ArticleCellMarkRead,
+    ArticleCellMarkBookmark
+};
+
+@interface ArticleListTableViewCell : MGSwipeTableCell
 
 @property (nonatomic) IBOutlet UIImageView* aImageView;
 @property (nonatomic) IBOutlet UILabel* aTitle;
 @property (nonatomic) IBOutlet UILabel* aCategory;
 @property (nonatomic) IBOutlet UILabel* aTime;
 
--(void)isRead:(BOOL)read;
+-(void)setMark:(ArticleCellMarkType)markType;
 @end

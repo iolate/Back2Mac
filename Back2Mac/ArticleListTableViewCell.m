@@ -26,7 +26,14 @@
     // Configure the view for the selected state
 }
 
--(void)isRead:(BOOL)read {
-    self.readMark.hidden = read;
+-(void)setMark:(ArticleCellMarkType)markType {
+    if (markType == ArticleCellMarkRead) {
+        self.readMark.backgroundColor = [UIColor colorWithRed:0 green:0.478431 blue:1 alpha:1];
+    }else if (markType == ArticleCellMarkBookmark) {
+        self.readMark.backgroundColor = [UIColor colorWithRed:0.9 green:0.525882 blue:0 alpha:1];
+    }else {
+        self.readMark.backgroundColor = [UIColor clearColor];
+    }
 }
+
 @end

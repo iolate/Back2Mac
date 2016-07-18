@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, ArticleStoreType) {
     ArticleStoreTypeBookmark
 };
 
-+(void)_articleId:(NSString *)articleId toStore:(BOOL)store withUserInfo:(NSDictionary *)userInfo for:(ArticleStoreType)type {
++(void)_articleId:(NSString *)articleId toStore:(BOOL)store withUserInfo:(NSDictionary *)userInfo forType:(ArticleStoreType)type {
     NSString* path = nil;
     if (type == ArticleStoreTypeRead) path = @"read.plist";
     else if (type == ArticleStoreTypeBookmark) path = @"bookmark.plist";
@@ -130,7 +130,7 @@ typedef NS_ENUM(NSInteger, ArticleStoreType) {
         NSMutableDictionary* data = [NSMutableDictionary dictionaryWithContentsOfFile:path] ?: [NSMutableDictionary dictionary];
         
         if (store && [data.allKeys containsObject:articleId] == FALSE) {
-            [data setObject:userInfo forKey:articleId];
+            [data setObject:userInfo ?: @{} forKey:articleId];
         }else if (store == FALSE && [data.allKeys containsObject:articleId]) {
             [data removeObjectForKey:articleId];
         }else { return; }
@@ -140,11 +140,11 @@ typedef NS_ENUM(NSInteger, ArticleStoreType) {
 }
 
 +(void)articleId:(NSString *)articleId toRead:(BOOL)opt {
-    [self _articleId:articleId toStore:opt withUserInfo:nil for:ArticleStoreTypeRead];
+    [self _articleId:articleId toStore:opt withUserInfo:nil forType:ArticleStoreTypeRead];
 }
 
 +(void)articleId:(NSString *)articleId toBookmark:(BOOL)opt userInfo:(NSDictionary *)userInfo {
-    [self _articleId:articleId toStore:opt withUserInfo:userInfo for:ArticleStoreTypeBookmark];
+    [self _articleId:articleId toStore:opt withUserInfo:userInfo forType:ArticleStoreTypeBookmark];
 }
 
 +(NSArray *)readArticlesList {

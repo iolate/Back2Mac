@@ -19,7 +19,8 @@
 }
 @property (nonatomic) NSInteger lastFetchedPage;
 @property (nonatomic, strong) NSArray* articleList;
-@property (nonatomic, strong) NSArray* readList;
+@property (nonatomic, strong) NSMutableArray* readList;
+@property (nonatomic, strong) NSMutableArray* bookmarkList;
 @property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
@@ -78,7 +79,7 @@
 }
 
 -(void)_fetchArticleListWithPage:(NSInteger)page completion:(void (^)(NSError* error))completionBlock {
-    NSString* url = [NSString stringWithFormat:@"http://%@/list?page=%ld", API_HOST, page];
+    NSString* url = [NSString stringWithFormat:@"http://%@/list?page=%ld", API_HOST, (long)page];
     NSDictionary* api_data = [NSDictionary dictionaryWithContentsOfJSONURLString:url];
     
     if (api_data != nil) {
@@ -139,7 +140,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     defaultViewer = [[Back2Mac getUserDefaults:DEFAULT_DEFAULT_VIEWER withDefault:@0] unsignedIntegerValue];
-    self.readList = [Back2Mac readArticlesList];
+    self.readList = [NSMutableArray arrayWithArray:[Back2Mac readArticlesList]];
+    self.bookmarkList = [NSMutableArray arrayWithArray:[Back2Mac bookmarksList].allKeys];
     [self.tableView reloadData];
     
     [super viewWillAppear:animated];
@@ -200,7 +202,58 @@
         cell.aCategory.text = post[@"category"];
         cell.aTime.text = post[@"date"];
         
-        [cell isRead:[self.readList containsObject:post[@"id"]]];
+        BOOL isRead = [self.readList containsObject:post[@"id"]];
+        BOOL isBookmarked = [self.bookmarkList containsObject:post[@"id"]];
+        [cell setMark:isBookmarked ? ArticleCellMarkBookmark : (!isRead ? ArticleCellMarkRead : ArticleCellMarkNone)];
+        
+        if (cell.leftButtons.count == 0) {
+            MGSwipeButton* btnRead = [MGSwipeButton buttonWithTitle:isRead ? @"읽지\n않음" : @"읽음" backgroundColor:[UIColor colorWithRed:0 green:0.478431 blue:1 alpha:1] callback:^BOOL(MGSwipeTableCell *sender) {
+                NSString* articleId = self.articleList[[self.tableView indexPathForCell:sender].row][@"id"];
+                
+                BOOL b_isRead = ![self.readList containsObject:articleId];
+                BOOL b_isBooked = [self.bookmarkList containsObject:articleId];
+                
+                [Back2Mac articleId:articleId toRead:b_isRead];
+                if (b_isRead) [self.readList addObject:articleId];
+                else [self.readList removeObject:articleId];
+                
+                [(MGSwipeButton *)sender.leftButtons[0] setTitle:b_isRead ? @"읽지\n않음" : @"읽음" forState:UIControlStateNormal];
+                [(ArticleListTableViewCell *)sender setMark:b_isBooked ? ArticleCellMarkBookmark : (!b_isRead ? ArticleCellMarkRead : ArticleCellMarkNone)];
+                return TRUE;
+            }];
+            cell.leftButtons = @[btnRead];
+            cell.leftSwipeSettings.transition = MGSwipeTransitionDrag;
+            cell.leftExpansion.buttonIndex = 0;
+            cell.leftExpansion.threshold = 2.5f;
+            cell.leftExpansion.fillOnTrigger = YES;
+        }else{
+            [cell.leftButtons[0] setTitle:isRead ? @"읽지\n않음" : @"읽음" forState:UIControlStateNormal];
+        }
+        
+        if (cell.rightButtons.count == 0) {
+            MGSwipeButton* btnBookmark = [MGSwipeButton buttonWithTitle:isBookmarked ? @"책갈피\n취소" : @"책갈피" backgroundColor:[UIColor colorWithRed:0.9 green:0.525882 blue:0 alpha:1] callback:^BOOL(MGSwipeTableCell *sender) {
+                NSDictionary* b_post = self.articleList[[self.tableView indexPathForCell:sender].row];
+                NSString* articleId = b_post[@"id"];
+                
+                BOOL b_isRead = [self.readList containsObject:articleId];
+                BOOL b_isBooked = ![self.bookmarkList containsObject:articleId];
+                
+                [Back2Mac articleId:articleId toBookmark:b_isBooked userInfo:b_post];
+                if (b_isBooked) [self.bookmarkList addObject:articleId];
+                else [self.bookmarkList removeObject:articleId];
+                
+                [(MGSwipeButton *)sender.rightButtons[0] setTitle:b_isBooked ? @"책갈피\n취소" : @"책갈피" forState:UIControlStateNormal];
+                [(ArticleListTableViewCell *)sender setMark:b_isBooked ? ArticleCellMarkBookmark : (!b_isRead ? ArticleCellMarkRead : ArticleCellMarkNone)];
+                return TRUE;
+            }];
+            cell.rightButtons = @[btnBookmark];
+            cell.rightSwipeSettings.transition = MGSwipeTransitionDrag;
+            cell.rightExpansion.buttonIndex = 0;
+            cell.rightExpansion.threshold = 2.0f;
+            cell.rightExpansion.fillOnTrigger = YES;
+        }else{
+            [cell.rightButtons[0] setTitle:isBookmarked ? @"책갈피\n취소" : @"책갈피" forState:UIControlStateNormal];
+        }
         
         return cell;
     }
